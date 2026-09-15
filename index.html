@@ -18,12 +18,13 @@
   .step-label .num{background:#1e6df2;color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0;}
 
   .picker{position:relative;}
-  .picker input{width:100%;padding:18px 18px 18px 18px;border:2px solid #c9d6e8;border-radius:16px;font-size:18px;background:#fff;outline:none;font-weight:600;color:#0b1b2f;}
-  .picker input:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
-  .picker .selected-pill{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:#0f9d58;color:#fff;font-size:13px;font-weight:700;padding:4px 10px;border-radius:20px;display:none;}
-  .picker.chosen input{border-color:#0f9d58;background:#f4fbf6;}
-  .picker.chosen .selected-pill{display:inline-block;}
-  .picker-results{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:18px;box-shadow:0 16px 40px -10px rgba(0,0,0,.28);max-height:360px;overflow-y:auto;z-index:50;display:none;border:2px solid #e2eaf5;}
+  .picker-fields{display:grid;grid-template-columns:1fr;gap:14px;}
+  .picker-field label{font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;}
+  .picker-field .opt-tag{font-size:13px;font-weight:500;color:#8f9fb2;}
+  .picker-field .req-tag{font-size:13px;font-weight:800;color:#e53935;letter-spacing:.3px;}
+  .picker-field input{width:100%;padding:16px;border:2px solid #c9d6e8;border-radius:14px;font-size:17px;background:#fff;outline:none;font-weight:600;color:#0b1b2f;}
+  .picker-field input:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
+  .picker-results{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:18px;box-shadow:0 16px 40px -10px rgba(0,0,0,.28);max-height:340px;overflow-y:auto;z-index:50;display:none;border:2px solid #e2eaf5;}
   .picker-results.show{display:block;}
   .picker-results .group-label{font-size:12px;font-weight:800;color:#5e6f8b;letter-spacing:.6px;text-transform:uppercase;padding:12px 16px 6px;}
   .picker-results .result{padding:16px;border-bottom:1px solid #f1f5fb;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
@@ -97,19 +98,14 @@
   .chosen-summary strong{color:#0b1b2f;}
 
   /* Modal system */
-  .modal-backdrop{position:fixed;inset:0;background:rgba(11,27,47,.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,27,47,.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);overflow-y:auto;}
   .modal-backdrop.show{display:flex;animation:fadeIn .15s ease-out;}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  .modal{background:#fff;border-radius:24px;max-width:520px;width:100%;padding:28px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35);}
-  .modal h3{font-size:22px;font-weight:800;color:#0b1b2f;margin-bottom:12px;}
-  .modal p{font-size:16px;color:#3d5170;line-height:1.5;margin-bottom:18px;font-weight:500;}
-  .modal .sim-item{padding:16px;background:#f7faff;border:2px solid #dde8f5;border-radius:14px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-  .modal .sim-item:hover,.modal .sim-item:active{border-color:#2f7ef5;background:#eef6ff;}
-  .modal .sim-item .lbl{font-weight:700;color:#0b1b2f;font-size:16px;}
-  .modal .sim-item .meta{font-size:14px;color:#5e6f8b;margin-top:3px;font-weight:500;}
-  .modal .sim-item .id{font-size:13px;font-weight:800;background:#eef2f8;color:#3d5170;padding:4px 10px;border-radius:20px;}
-  .modal .actions{display:flex;gap:12px;margin-top:20px;flex-direction:column;}
+  .modal{background:#fff;border-radius:24px;max-width:540px;width:100%;padding:28px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35);margin:auto;}
+  .modal h3{font-size:22px;font-weight:800;color:#0b1b2f;margin-bottom:8px;}
+  .modal .modal-sub{font-size:15px;color:#5e6f8b;line-height:1.5;margin-bottom:20px;font-weight:500;}
+  .modal .actions{display:flex;gap:12px;margin-top:22px;flex-direction:column;}
   .modal .actions button{padding:20px;border-radius:16px;border:none;font-weight:800;font-size:17px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15);}
   .modal .actions button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15);}
   .modal .actions .cancel{background:#eef2f8;color:#3d5170;box-shadow:0 4px 0 #c9d6e8;}
@@ -117,8 +113,23 @@
   .modal .actions .confirm{background:#0f9d58;color:#fff;box-shadow:0 4px 0 #0a6c3c;}
   .modal .actions .confirm:active{box-shadow:0 1px 0 #0a6c3c;}
 
-  /* Status modal (spinner / success) */
-  .status-modal{background:#fff;border-radius:28px;padding:48px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popIn .25s cubic-bezier(.2,.8,.4,1.2);}
+  /* Add new modal fields */
+  .modal-field{margin-bottom:18px;}
+  .modal-field label{font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;}
+  .modal-field .opt-tag{font-size:13px;font-weight:500;color:#8f9fb2;}
+  .modal-field .req-tag{font-size:13px;font-weight:800;color:#e53935;letter-spacing:.3px;}
+  .modal-field input{width:100%;padding:16px;border:2px solid #c9d6e8;border-radius:14px;font-size:17px;background:#fff;outline:none;font-weight:600;color:#0b1b2f;}
+  .modal-field input:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
+  .modal-field .hint{font-size:13px;color:#8f9fb2;margin-top:4px;font-weight:500;}
+
+  .sim-label{font-size:13px;font-weight:800;color:#b06b00;text-transform:uppercase;letter-spacing:.5px;margin-top:20px;margin-bottom:10px;}
+  .sim-item{padding:14px;background:#fff8e6;border:2px solid #f0d89b;border-radius:12px;margin-bottom:8px;cursor:pointer;transition:.12s;}
+  .sim-item:hover,.sim-item:active{background:#ffefc7;}
+  .sim-lbl{font-weight:700;color:#0b1b2f;font-size:15px;}
+  .sim-meta{font-size:13px;color:#8a6516;margin-top:3px;font-weight:600;}
+
+  /* Status modal */
+  .status-modal{background:#fff;border-radius:28px;padding:48px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popIn .25s cubic-bezier(.2,.8,.4,1.2);margin:auto;}
   @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
   .big-spinner{width:96px;height:96px;border:10px solid #e2eaf5;border-top-color:#1e6df2;border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 28px;}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -126,6 +137,8 @@
   .big-error{width:120px;height:120px;background:#e53935;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;color:#fff;font-size:72px;font-weight:800;animation:popIn .35s cubic-bezier(.2,.8,.4,1.5);box-shadow:0 8px 24px rgba(229,57,53,.35);}
   .status-modal h2{font-size:26px;font-weight:800;color:#0b1b2f;margin-bottom:14px;line-height:1.25;}
   .status-modal p{font-size:18px;color:#3d5170;line-height:1.5;font-weight:500;}
+  .modal-close-btn{margin-top:26px;padding:20px 40px;border:none;border-radius:16px;background:#0b1b2f;color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 4px 0 #05101d;width:100%;letter-spacing:.3px;}
+  .modal-close-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
 </style>
 </head>
 <body>
@@ -143,8 +156,16 @@
     <div class="step">
       <div class="step-label"><span class="num">1</span> Which equipment did you service?</div>
       <div class="picker" id="pickerPhoto">
-        <input type="text" id="searchPhoto" placeholder="🔍 Type a few letters…" autocomplete="off" autocapitalize="off" spellcheck="false">
-        <span class="selected-pill">✓</span>
+        <div class="picker-fields">
+          <div class="picker-field">
+            <label>Equipment Name <span class="opt-tag">(optional — only if it has a name on the side, like a boat)</span></label>
+            <input type="text" id="namePhoto" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+          <div class="picker-field">
+            <label>Model / Size <span class="req-tag">* REQUIRED</span></label>
+            <input type="text" id="modelPhoto" placeholder="e.g. 25ft Boston Whaler, Cat D20 Loader" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+        </div>
         <div class="picker-results" id="resultsPhoto"></div>
       </div>
       <div class="chosen-summary" id="chosenPhoto"></div>
@@ -171,7 +192,7 @@
           <input type="text" id="coworkerInputPhoto" placeholder="e.g. Dave, Danny, Tony" autocomplete="off">
           <button type="button" id="addCoworkerPhoto">+ Add</button>
         </div>
-        <div class="hint">Type names separated by commas. We'll add them automatically — you don't have to tap Add.</div>
+        <div class="hint">Type names separated by commas. They'll be added automatically — you don't have to tap Add.</div>
       </div>
       <div class="folder-preview" id="folderPreviewPhoto"></div>
     </div>
@@ -183,11 +204,10 @@
         <span class="count" id="fileCount">0</span>
       </label>
       <input type="file" id="files" accept="image/*" multiple>
-      <div class="hint">📱 You can pick <strong>many photos at once</strong> from your camera roll. Just hold and select them all.</div>
+      <div class="hint">📱 You can pick <strong>many photos at once</strong> from your camera roll. Hold and select them all.</div>
     </div>
 
     <button class="submit" id="submitPhotos">⬆️ Upload Photos</button>
-    <div class="status" id="statusPhotos" style="display:none;"></div>
   </div>
 
   <!-- ============ SIGN PANEL ============ -->
@@ -195,8 +215,16 @@
     <div class="step">
       <div class="step-label"><span class="num">1</span> Which equipment did you service?</div>
       <div class="picker" id="pickerSign">
-        <input type="text" id="searchSign" placeholder="🔍 Type a few letters…" autocomplete="off" autocapitalize="off" spellcheck="false">
-        <span class="selected-pill">✓</span>
+        <div class="picker-fields">
+          <div class="picker-field">
+            <label>Equipment Name <span class="opt-tag">(optional)</span></label>
+            <input type="text" id="nameSign" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+          <div class="picker-field">
+            <label>Model / Size <span class="req-tag">* REQUIRED</span></label>
+            <input type="text" id="modelSign" placeholder="e.g. 25ft Boston Whaler" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+        </div>
         <div class="picker-results" id="resultsSign"></div>
       </div>
       <div class="chosen-summary" id="chosenSign"></div>
@@ -248,21 +276,40 @@
     </div>
 
     <button class="submit" id="submitSign">✅ Save Customer Sign-off</button>
-    <div class="status" id="statusSign" style="display:none;"></div>
   </div>
 
   <div class="small-note">Every upload is filed by equipment ID, date, and tech name.</div>
 </div>
 
-<!-- ============ SIMILAR-EQUIPMENT MODAL ============ -->
-<div class="modal-backdrop" id="simModal">
+<!-- ============ ADD NEW EQUIPMENT MODAL ============ -->
+<div class="modal-backdrop" id="addModal">
   <div class="modal">
-    <h3>⚠️ Similar equipment already exists</h3>
-    <p id="simModalText">Before creating a new one, please check — is one of these what you meant?</p>
-    <div id="simList"></div>
+    <h3>Add New Equipment</h3>
+    <p class="modal-sub">Fill this in once. After this, everyone can find it by searching.</p>
+
+    <div class="modal-field">
+      <label>Equipment Name <span class="opt-tag">(optional)</span></label>
+      <input type="text" id="addName" placeholder="e.g. Sea Breeze" autocomplete="off">
+      <div class="hint">Only if it has a name painted on it (like a boat). Leave blank for most equipment.</div>
+    </div>
+
+    <div class="modal-field">
+      <label>Model / Size <span class="req-tag">* REQUIRED</span></label>
+      <input type="text" id="addModel" placeholder="e.g. 25ft Boston Whaler, Cat D20 Loader" autocomplete="off">
+      <div class="hint">The make, model, or size of the equipment.</div>
+    </div>
+
+    <div class="modal-field">
+      <label>Customer / Owner <span class="opt-tag">(optional)</span></label>
+      <input type="text" id="addCustomer" placeholder="e.g. Johnny's Farm" autocomplete="off">
+      <div class="hint">Only type this once, when the equipment is first added.</div>
+    </div>
+
+    <div id="addSimilarList"></div>
+
     <div class="actions">
-      <button class="cancel" id="simCancel">← No, go back</button>
-      <button class="confirm" id="simConfirm">None of these — create new</button>
+      <button class="cancel" id="addCancel">Cancel</button>
+      <button class="confirm" id="addConfirm">✓ Create Equipment</button>
     </div>
   </div>
 </div>
@@ -277,10 +324,11 @@
     </div>
     <h2 id="statusTitle">Working…</h2>
     <p id="statusBody">Please wait.</p>
+    <button id="statusCloseBtn" class="modal-close-btn" style="display:none;">OK</button>
   </div>
 </div>
 
-<!-- ============ HIDDEN IFRAME + FORM FOR RELIABLE UPLOAD ============ -->
+<!-- ============ HIDDEN IFRAME + FORM ============ -->
 <iframe name="upload_target" id="uploadTarget" style="display:none;" title="upload target"></iframe>
 <form id="uploadForm" target="upload_target" method="POST" enctype="text/plain" action="" style="display:none;">
   <input type="hidden" name="data" id="uploadData">
@@ -290,7 +338,7 @@
 /* ============================================================
    ⚠️ CONFIG — REPLACE WITH YOUR DEPLOYED APPS SCRIPT URL
    ============================================================ */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4pxU3D9FSsfQj3u8Q2Z1B3CKzAy3ZiBPSXZ25-dwHaaEA7I7xZDx6APa_49b-lWbUnA/exec";
+const APPS_SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
 
 const todayStr = (() => {
   const d = new Date();
@@ -299,14 +347,15 @@ const todayStr = (() => {
 document.getElementById("custDate").value = todayStr;
 
 /* ============================================================
-   MODAL HELPERS
+   STATUS MODAL
    ============================================================ */
-const statusModal = document.getElementById("statusModal");
-const statusTitle = document.getElementById("statusTitle");
-const statusBody  = document.getElementById("statusBody");
-const statusSpinner = document.getElementById("statusSpinner");
-const statusCheck = document.getElementById("statusCheck");
-const statusError = document.getElementById("statusError");
+const statusModal    = document.getElementById("statusModal");
+const statusTitle    = document.getElementById("statusTitle");
+const statusBody     = document.getElementById("statusBody");
+const statusSpinner  = document.getElementById("statusSpinner");
+const statusCheck    = document.getElementById("statusCheck");
+const statusError    = document.getElementById("statusError");
+const statusCloseBtn = document.getElementById("statusCloseBtn");
 let successTimer = null;
 
 function showLoading(title, body) {
@@ -314,6 +363,7 @@ function showLoading(title, body) {
   statusSpinner.style.display = "block";
   statusCheck.style.display = "none";
   statusError.style.display = "none";
+  statusCloseBtn.style.display = "none";
   statusTitle.textContent = title || "Working…";
   statusBody.textContent  = body  || "Please wait.";
   statusModal.classList.add("show");
@@ -323,10 +373,11 @@ function showSuccess(title, body, autoDismissMs) {
   statusSpinner.style.display = "none";
   statusCheck.style.display = "flex";
   statusError.style.display = "none";
+  statusCloseBtn.style.display = "none";
   statusTitle.textContent = title || "All done!";
   statusBody.textContent  = body  || "Thanks.";
   statusModal.classList.add("show");
-  const delay = (typeof autoDismissMs === "number") ? autoDismissMs : 2600;
+  const delay = (typeof autoDismissMs === "number") ? autoDismissMs : 2800;
   successTimer = setTimeout(() => {
     statusModal.classList.remove("show");
     successTimer = null;
@@ -338,6 +389,7 @@ function showError(title, body) {
   statusSpinner.style.display = "none";
   statusCheck.style.display = "none";
   statusError.style.display = "flex";
+  statusCloseBtn.style.display = "block";
   statusTitle.textContent = title || "Something went wrong";
   statusBody.textContent  = body  || "Please try again.";
   statusModal.classList.add("show");
@@ -348,10 +400,16 @@ function hideStatus() {
   statusModal.classList.remove("show");
 }
 
+statusCloseBtn.addEventListener("click", hideStatus);
+// Tap outside the status modal to close — but only when it's an error
+statusModal.addEventListener("click", (e) => {
+  if (e.target === statusModal && statusCloseBtn.style.display !== "none") {
+    hideStatus();
+  }
+});
+
 /* ============================================================
-   RELIABLE UPLOAD VIA IFRAME FORM
-   The browser fires iframe.onload ONLY when Apps Script has
-   actually returned a response — this is our "done" signal.
+   IFRAME UPLOAD (reliable "done" signal)
    ============================================================ */
 function submitViaIframe(url, payload) {
   return new Promise((resolve, reject) => {
@@ -365,15 +423,14 @@ function submitViaIframe(url, payload) {
       done = true;
       iframe.onload = null;
       reject(new Error("Upload timed out"));
-    }, 180000); // 3 min for big batches
+    }, 180000);
 
     iframe.onload = () => {
       if (done) return;
       done = true;
       clearTimeout(timeout);
       iframe.onload = null;
-      // small delay lets Apps Script finish any post-response writes
-      setTimeout(resolve, 400);
+      setTimeout(resolve, 500);
     };
 
     form.action = url;
@@ -433,18 +490,29 @@ function pushRecentId(id) {
   localStorage.setItem(RECENTS_KEY, JSON.stringify(arr.slice(0, MAX_RECENTS)));
 }
 
-async function loadEquipment() {
-  try {
-    const res = await fetch(APPS_SCRIPT_URL + "?action=list");
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || "load failed");
-    equipmentList = data.equipment || [];
-  } catch (err) {
-    console.error("loadEquipment failed:", err);
-    equipmentList = [];
+async function loadEquipment(retries) {
+  retries = (typeof retries === "number") ? retries : 3;
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      // Cache-buster: Apps Script CDN caches GET responses for ~30s
+      const url = APPS_SCRIPT_URL + "?action=list&_=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "load failed");
+      equipmentList = data.equipment || [];
+      // Refresh any open picker
+      if (document.getElementById("resultsPhoto").classList.contains("show")) renderPickerResults("photo");
+      if (document.getElementById("resultsSign").classList.contains("show"))  renderPickerResults("sign");
+      console.log("loadEquipment OK:", equipmentList.length, "items");
+      return;
+    } catch (err) {
+      console.warn("loadEquipment attempt " + (attempt+1) + " failed:", err);
+      if (attempt < retries - 1) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+    }
   }
-  if (document.getElementById("resultsPhoto").classList.contains("show")) renderResultsFor_("photo");
-  if (document.getElementById("resultsSign").classList.contains("show"))  renderResultsFor_("sign");
+  console.error("loadEquipment gave up after " + retries + " attempts");
+  equipmentList = [];
 }
 loadEquipment();
 
@@ -456,32 +524,74 @@ const pickerState = {
   sign:  { selected: null }
 };
 
-function matchesQuery_(item, q) {
-  if (!q) return true;
-  const hay = (item.id + " " + item.label + " " + item.customer).toLowerCase();
-  return q.toLowerCase().split(/\s+/).every(part => hay.includes(part));
+function ids_(which) {
+  return {
+    name:    which === "photo" ? "namePhoto" : "nameSign",
+    model:   which === "photo" ? "modelPhoto" : "modelSign",
+    picker:  which === "photo" ? "pickerPhoto" : "pickerSign",
+    results: which === "photo" ? "resultsPhoto" : "resultsSign",
+    summary: which === "photo" ? "chosenPhoto" : "chosenSign"
+  };
 }
 
-function renderResultsFor_(which) {
-  const inputEl   = document.getElementById(which === "photo" ? "searchPhoto" : "searchSign");
-  const resultsEl = document.getElementById(which === "photo" ? "resultsPhoto" : "resultsSign");
-  const q = inputEl.value.trim();
-  const matches = equipmentList.filter(e => matchesQuery_(e, q));
+function displayLabel_(e) {
+  if (!e) return "";
+  if (e.name && e.model) return e.name + " — " + e.model;
+  return e.name || e.model || e.label || "";
+}
 
-  const recentIds = getRecentIds();
-  const recentItems = recentIds
-    .map(id => equipmentList.find(e => e.id === id))
-    .filter(Boolean)
-    .filter(e => q ? matchesQuery_(e, q) : true);
+function setupPicker_(which) {
+  const i = ids_(which);
+  const nameEl    = document.getElementById(i.name);
+  const modelEl   = document.getElementById(i.model);
+  const resultsEl = document.getElementById(i.results);
+
+  function showDropdown() {
+    renderPickerResults(which);
+    resultsEl.classList.add("show");
+  }
+
+  nameEl.addEventListener("focus", showDropdown);
+  modelEl.addEventListener("focus", showDropdown);
+
+  nameEl.addEventListener("input", () => {
+    if (pickerState[which].selected) clearChosen_(which);
+    showDropdown();
+  });
+  modelEl.addEventListener("input", () => {
+    if (pickerState[which].selected) clearChosen_(which);
+    showDropdown();
+  });
+}
+
+function renderPickerResults(which) {
+  const i = ids_(which);
+  const nameEl    = document.getElementById(i.name);
+  const modelEl   = document.getElementById(i.model);
+  const resultsEl = document.getElementById(i.results);
+
+  const n = nameEl.value.trim();
+  const m = modelEl.value.trim();
+  const query = (n + " " + m).trim().toLowerCase();
+
+  const matches = query
+    ? equipmentList.filter(e => {
+        const hay = ((e.name || "") + " " + (e.model || "") + " " + e.id + " " + (e.customer || "")).toLowerCase();
+        return query.split(/\s+/).every(part => hay.includes(part));
+      })
+    : equipmentList;
+
+  const recentIds = !query ? getRecentIds() : [];
+  const recentItems = recentIds.map(id => equipmentList.find(e => e.id === id)).filter(Boolean);
 
   let html = "";
 
-  if (!q && recentItems.length > 0) {
+  if (!query && recentItems.length > 0) {
     html += `<div class="group-label">⭐ My Recent</div>`;
     recentItems.slice(0, 5).forEach(e => { html += resultRowHTML_(e); });
     if (equipmentList.length > recentItems.length) {
       html += `<div class="group-label">All Equipment (type to search)</div>`;
-      equipmentList.slice().sort((a,b)=>a.label.localeCompare(b.label)).slice(0,5).forEach(e => {
+      equipmentList.slice().sort((a,b) => (a.label || "").localeCompare(b.label || "")).slice(0, 5).forEach(e => {
         html += resultRowHTML_(e);
       });
     }
@@ -489,93 +599,213 @@ function renderResultsFor_(which) {
     const shown = matches.slice(0, 40);
     html += `<div class="group-label">${shown.length}${matches.length > shown.length ? " of " + matches.length : ""} match${matches.length===1?"":"es"}</div>`;
     shown.forEach(e => { html += resultRowHTML_(e); });
+  } else if (query) {
+    html += `<div class="empty">No equipment matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it as new.</small></div>`;
   } else {
-    html += `<div class="empty">No matches for "<strong>${escapeHTML_(q)}</strong>"<br><small>Use the button below to add it.</small></div>`;
+    html += `<div class="empty">Start typing to search.<br><small>Or tap below to add new equipment.</small></div>`;
   }
 
   html += `
     <div class="add-inline" data-action="add">
       <div class="plus">+</div>
       <div class="txt">
-        Add "${q ? escapeHTML_(q) : "new equipment"}" as new
-        <small>Only do this if it doesn't already exist above.</small>
+        Add as new equipment
+        <small>Only if it doesn't already exist above.</small>
       </div>
     </div>`;
 
   resultsEl.innerHTML = html;
-  resultsEl.classList.add("show");
 
   resultsEl.querySelectorAll(".result").forEach(el => {
-    el.addEventListener("click", () => chooseEquipment_(which, el.dataset.id));
+    el.addEventListener("click", () => selectEquipment_(which, el.dataset.id));
   });
-  resultsEl.querySelector('[data-action="add"]').addEventListener("click", () => {
-    openAddNew_(q, which);
-  });
+  const addBtn = resultsEl.querySelector('[data-action="add"]');
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      resultsEl.classList.remove("show");
+      openAddModal_(which);
+    });
+  }
 }
 
 function resultRowHTML_(e) {
-  const custLine = e.customer ? " · " + escapeHTML_(e.customer) : "";
+  const display = escapeHTML_(displayLabel_(e));
+  const meta = escapeHTML_(e.id) + (e.customer ? " · " + escapeHTML_(e.customer) : "");
   return `<div class="result" data-id="${e.id}">
     <div class="info">
-      <div class="lbl">${escapeHTML_(e.label)}</div>
-      <div class="meta">${e.id}${custLine}</div>
+      <div class="lbl">${display}</div>
+      <div class="meta">${meta}</div>
     </div>
     <div class="id">${e.id}</div>
   </div>`;
 }
 
-function chooseEquipment_(which, id) {
+function selectEquipment_(which, id) {
   const e = equipmentList.find(x => x.id === id);
   if (!e) return;
   pickerState[which].selected = e;
   pushRecentId(e.id);
 
-  const inputEl = document.getElementById(which === "photo" ? "searchPhoto" : "searchSign");
-  inputEl.value = e.label;
-  const pickerEl = document.getElementById(which === "photo" ? "pickerPhoto" : "pickerSign");
-  pickerEl.classList.add("chosen");
+  const i = ids_(which);
+  document.getElementById(i.name).value  = e.name  || "";
+  document.getElementById(i.model).value = e.model || e.label || "";
 
-  const summaryEl = document.getElementById(which === "photo" ? "chosenPhoto" : "chosenSign");
+  const summaryEl = document.getElementById(i.summary);
   summaryEl.classList.add("show");
-  summaryEl.innerHTML = `✓ <strong>${escapeHTML_(e.label)}</strong> &nbsp;·&nbsp; ${e.id}${e.customer ? " &nbsp;·&nbsp; " + escapeHTML_(e.customer) : ""}`;
+  const parts = [];
+  if (e.name)  parts.push(`<strong>${escapeHTML_(e.name)}</strong>`);
+  if (e.model) parts.push(`<strong>${escapeHTML_(e.model)}</strong>`);
+  const labelDisplay = parts.length ? parts.join(" — ") : escapeHTML_(e.label || "");
+  const custLine = e.customer ? ` &nbsp;·&nbsp; ${escapeHTML_(e.customer)}` : "";
+  summaryEl.innerHTML = `✓ ${labelDisplay} &nbsp;·&nbsp; ${e.id}${custLine}`;
 
-  document.getElementById(which === "photo" ? "resultsPhoto" : "resultsSign").classList.remove("show");
+  document.getElementById(i.results).classList.remove("show");
 }
 
 function clearChosen_(which) {
   pickerState[which].selected = null;
-  const pickerEl = document.getElementById(which === "photo" ? "pickerPhoto" : "pickerSign");
-  pickerEl.classList.remove("chosen");
-  const summaryEl = document.getElementById(which === "photo" ? "chosenPhoto" : "chosenSign");
-  summaryEl.classList.remove("show");
+  const i = ids_(which);
+  document.getElementById(i.summary).classList.remove("show");
 }
 
-const searchPhoto = document.getElementById("searchPhoto");
-const resultsPhoto = document.getElementById("resultsPhoto");
-searchPhoto.addEventListener("focus", () => renderResultsFor_("photo"));
-searchPhoto.addEventListener("input", () => {
-  if (pickerState.photo.selected) clearChosen_("photo");
-  renderResultsFor_("photo");
-});
+// Wire both pickers
+setupPicker_("photo");
+setupPicker_("sign");
 
-const searchSign = document.getElementById("searchSign");
-const resultsSign = document.getElementById("resultsSign");
-searchSign.addEventListener("focus", () => renderResultsFor_("sign"));
-searchSign.addEventListener("input", () => {
-  if (pickerState.sign.selected) clearChosen_("sign");
-  renderResultsFor_("sign");
-});
-
+// Outside click closes both dropdowns
 document.addEventListener("click", (e) => {
   ["photo","sign"].forEach(which => {
-    const pickerEl = document.getElementById(which === "photo" ? "pickerPhoto" : "pickerSign");
-    const resultsEl = document.getElementById(which === "photo" ? "resultsPhoto" : "resultsSign");
-    if (!pickerEl.contains(e.target)) resultsEl.classList.remove("show");
+    const i = ids_(which);
+    const pickerEl  = document.getElementById(i.picker);
+    const resultsEl = document.getElementById(i.results);
+    if (!pickerEl.contains(e.target) && !resultsEl.contains(e.target)) {
+      resultsEl.classList.remove("show");
+    }
   });
 });
 
 /* ============================================================
-   COWORKERS — auto-add on blur / Enter / submit, comma-separated
+   ADD NEW EQUIPMENT MODAL
+   ============================================================ */
+let pendingWhich = "photo";
+
+function openAddModal_(which) {
+  pendingWhich = which || "photo";
+  const i = ids_(which);
+
+  // Prefill from current field values
+  document.getElementById("addName").value     = document.getElementById(i.name).value.trim();
+  document.getElementById("addModel").value    = document.getElementById(i.model).value.trim();
+  document.getElementById("addCustomer").value = "";
+
+  updateAddModalSuggestions();
+  document.getElementById("addModal").classList.add("show");
+
+  // Focus model field (the required one) if name is empty, else focus customer
+  setTimeout(() => {
+    const nameVal = document.getElementById("addName").value.trim();
+    if (!nameVal) document.getElementById("addName").focus();
+    else document.getElementById("addModel").focus();
+  }, 120);
+}
+
+function updateAddModalSuggestions() {
+  const n = document.getElementById("addName").value.trim().toLowerCase();
+  const m = document.getElementById("addModel").value.trim().toLowerCase();
+  const listEl = document.getElementById("addSimilarList");
+  const query = (n + " " + m).trim();
+
+  if (!query || query.length < 2) {
+    listEl.innerHTML = "";
+    return;
+  }
+
+  const words = query.split(/\s+/).filter(w => w.length >= 3);
+  if (words.length === 0) { listEl.innerHTML = ""; return; }
+
+  const similar = equipmentList.filter(e => {
+    const hay = ((e.name || "") + " " + (e.model || "")).toLowerCase();
+    return words.some(w => hay.includes(w));
+  });
+
+  if (similar.length === 0) { listEl.innerHTML = ""; return; }
+
+  listEl.innerHTML = `
+    <div class="sim-label">⚠️ Similar items already exist:</div>
+    ${similar.slice(0, 5).map(e => `
+      <div class="sim-item" data-id="${e.id}">
+        <div class="sim-lbl">${escapeHTML_(displayLabel_(e))}</div>
+        <div class="sim-meta">${escapeHTML_(e.id)}${e.customer ? " · " + escapeHTML_(e.customer) : ""}</div>
+      </div>
+    `).join("")}
+    <div style="font-size:13px;color:#8a6516;margin-top:6px;font-weight:600;">Tap one to use it instead, or tap Create Equipment below to make a new one.</div>`;
+
+  listEl.querySelectorAll(".sim-item").forEach(el => {
+    el.addEventListener("click", () => {
+      document.getElementById("addModal").classList.remove("show");
+      selectEquipment_(pendingWhich, el.dataset.id);
+    });
+  });
+}
+
+document.getElementById("addName").addEventListener("input", updateAddModalSuggestions);
+document.getElementById("addModel").addEventListener("input", updateAddModalSuggestions);
+
+document.getElementById("addCancel").addEventListener("click", () => {
+  document.getElementById("addModal").classList.remove("show");
+});
+
+document.getElementById("addConfirm").addEventListener("click", async () => {
+  const name     = document.getElementById("addName").value.trim();
+  const model    = document.getElementById("addModel").value.trim();
+  const customer = document.getElementById("addCustomer").value.trim();
+
+  if (!model) {
+    showError("Model / Size is required", "Please type at least the model or size of the equipment.");
+    return;
+  }
+
+  document.getElementById("addModal").classList.remove("show");
+  showLoading("Creating new equipment…", "This takes a few seconds. Please wait.");
+
+  try {
+    await submitViaIframe(APPS_SCRIPT_URL, {
+      action: "addEquipment",
+      name: name,
+      model: model,
+      customer: customer
+    });
+
+    // Wait for sheet to settle, then reload with retries
+    await new Promise(r => setTimeout(r, 1200));
+    await loadEquipment();
+
+    // Try to find and select the new equipment
+    const wantedModel = model.toLowerCase();
+    const wantedName  = name.toLowerCase();
+    let found = equipmentList.find(e =>
+      (e.model || "").toLowerCase() === wantedModel &&
+      (e.name  || "").toLowerCase() === wantedName
+    );
+    if (!found) {
+      found = equipmentList.find(e => (e.model || "").toLowerCase() === wantedModel);
+    }
+    if (found) {
+      selectEquipment_(pendingWhich, found.id);
+    } else {
+      console.warn("Newly created equipment not found in list after reload");
+    }
+
+    showSuccess("Equipment created!", "Everyone can now search for it by typing a few letters.");
+
+  } catch (err) {
+    console.error("Create equipment failed:", err);
+    showError("Could not create equipment", "Please check your connection and try again.");
+  }
+});
+
+/* ============================================================
+   COWORKERS
    ============================================================ */
 const coworkers = { photo: [], sign: [] };
 
@@ -589,6 +819,7 @@ function slugifyName_(name) {
 }
 
 function buildFolderTag_(which) {
+  const i = ids_(which);
   const lead = document.getElementById(which === "photo" ? "techLeadPhoto" : "techLeadSign").value.trim();
   const extras = coworkers[which];
   const names = [lead].concat(extras).filter(n => n && n.trim());
@@ -604,15 +835,14 @@ function renderCoworkers_(which) {
   chipsEl.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("click", () => {
       const w = btn.dataset.which;
-      const i = parseInt(btn.dataset.index, 10);
-      coworkers[w].splice(i, 1);
+      const idx = parseInt(btn.dataset.index, 10);
+      coworkers[w].splice(idx, 1);
       renderCoworkers_(w);
       updateFolderPreviews();
     });
   });
 }
 
-// Split "dave, danny, tony" or "dave; danny" into individual names
 function parseNameList_(str) {
   return String(str || "")
     .split(/[,;]+/)
@@ -625,7 +855,6 @@ function addCoworkersFromString_(which, str) {
   const names = parseNameList_(str);
   let added = false;
   names.forEach(n => {
-    // avoid duplicates (case-insensitive)
     const exists = coworkers[which].some(c => c.toLowerCase() === n.toLowerCase());
     if (!exists) { coworkers[which].push(n); added = true; }
   });
@@ -643,19 +872,14 @@ function flushCoworkerInput_(which) {
   inputEl.value = "";
 }
 
-// Wire the Add buttons (which also flush any pending text)
 document.getElementById("addCoworkerPhoto").addEventListener("click", () => flushCoworkerInput_("photo"));
 document.getElementById("addCoworkerSign").addEventListener("click",  () => flushCoworkerInput_("sign"));
-
-// Auto-flush on Enter
 document.getElementById("coworkerInputPhoto").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); flushCoworkerInput_("photo"); }
 });
 document.getElementById("coworkerInputSign").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); flushCoworkerInput_("sign"); }
 });
-
-// Auto-flush on blur (user tapped elsewhere)
 document.getElementById("coworkerInputPhoto").addEventListener("blur", () => flushCoworkerInput_("photo"));
 document.getElementById("coworkerInputSign").addEventListener("blur",  () => flushCoworkerInput_("sign"));
 
@@ -663,7 +887,7 @@ document.getElementById("coworkerInputSign").addEventListener("blur",  () => flu
    FOLDER PREVIEW
    ============================================================ */
 function updateFolderPreviews() {
-  const preview = (which) => {
+  ["photo","sign"].forEach(which => {
     const el = document.getElementById(which === "photo" ? "folderPreviewPhoto" : "folderPreviewSign");
     const tag = buildFolderTag_(which);
     if (!tag) { el.classList.remove("show"); return; }
@@ -672,9 +896,7 @@ function updateFolderPreviews() {
       : `${todayStr}_SIGNATURE-${tag}`;
     el.classList.add("show");
     el.innerHTML = `📁 Will save into: <code>${escapeHTML_(folderName)}</code>`;
-  };
-  preview("photo");
-  preview("sign");
+  });
 }
 
 function getPtype_() {
@@ -685,90 +907,7 @@ document.querySelectorAll('input[name="ptype"]').forEach(r => {
 });
 
 /* ============================================================
-   ADD NEW EQUIPMENT
-   ============================================================ */
-let pendingNewLabel = "";
-let pendingWhich = "photo";
-
-function openAddNew_(initialLabel, which) {
-  pendingWhich = which || "photo";
-  pendingNewLabel = (initialLabel || "").trim();
-  if (!pendingNewLabel) {
-    pendingNewLabel = prompt("Equipment name (make + model):");
-    if (!pendingNewLabel || !pendingNewLabel.trim()) return;
-    pendingNewLabel = pendingNewLabel.trim();
-  }
-
-  const words = pendingNewLabel.toLowerCase().split(/\s+/).filter(w => w.length >= 3);
-  const similar = equipmentList.filter(e => {
-    const hay = (e.label + " " + e.customer).toLowerCase();
-    return words.some(w => hay.includes(w));
-  });
-
-  if (similar.length > 0) {
-    const simList = document.getElementById("simList");
-    simList.innerHTML = similar.slice(0, 8).map(e => `
-      <div class="sim-item" data-id="${e.id}">
-        <div>
-          <div class="lbl">${escapeHTML_(e.label)}</div>
-          <div class="meta">${e.id}${e.customer ? " · " + escapeHTML_(e.customer) : ""}</div>
-        </div>
-        <div class="id">${e.id}</div>
-      </div>`).join("");
-    document.getElementById("simModalText").textContent =
-      `You typed "${pendingNewLabel}". Before creating a new entry, is one of these the same piece of equipment?`;
-    document.getElementById("simModal").classList.add("show");
-
-    simList.querySelectorAll(".sim-item").forEach(el => {
-      el.addEventListener("click", () => {
-        document.getElementById("simModal").classList.remove("show");
-        chooseEquipment_(pendingWhich, el.dataset.id);
-      });
-    });
-  } else {
-    confirmCreateNew_(pendingNewLabel, pendingWhich);
-  }
-}
-
-document.getElementById("simCancel").addEventListener("click", () => {
-  document.getElementById("simModal").classList.remove("show");
-});
-document.getElementById("simConfirm").addEventListener("click", () => {
-  document.getElementById("simModal").classList.remove("show");
-  confirmCreateNew_(pendingNewLabel, pendingWhich);
-});
-
-async function confirmCreateNew_(label, which) {
-  const customer = prompt(
-    "Customer / owner of this equipment (optional — leave blank if unknown).\n\n" +
-    "You only type this ONCE, when the equipment is first added."
-  );
-  if (customer === null) return;
-
-  // 🔵 Loading indicator — "creating new equipment"
-  showLoading("Creating new equipment…", "This takes a few seconds. Please wait.");
-
-  try {
-    await submitViaIframe(APPS_SCRIPT_URL, {
-      action: "addEquipment",
-      label: label.trim(),
-      customer: (customer || "").trim()
-    });
-
-    await loadEquipment();
-    const found = equipmentList.find(e => e.label.toLowerCase() === label.toLowerCase());
-    if (found) chooseEquipment_(which, found.id);
-
-    showSuccess("Equipment created!", "Everyone can now search for it by typing a few letters.");
-
-  } catch (err) {
-    console.error(err);
-    showError("Could not create equipment", "Please check your connection and try again.");
-  }
-}
-
-/* ============================================================
-   PHOTO INPUT — count display
+   PHOTO INPUT
    ============================================================ */
 const filesInput = document.getElementById("files");
 const fileBtn = document.getElementById("fileBtn");
@@ -788,25 +927,29 @@ filesInput.addEventListener("change", () => {
 /* ============================================================
    PHOTO PANEL SUBMIT
    ============================================================ */
-const statusPhotos = document.getElementById("statusPhotos");
-
 document.getElementById("submitPhotos").addEventListener("click", async () => {
   const btn = document.getElementById("submitPhotos");
-
-  // Auto-add any pending coworker text BEFORE building payload
   flushCoworkerInput_("photo");
 
   const chosen = pickerState.photo.selected;
-  const ptype = getPtype_();
-  const files = filesInput.files;
-  const lead = document.getElementById("techLeadPhoto").value.trim();
+  const ptype  = getPtype_();
+  const files  = filesInput.files;
+  const lead   = document.getElementById("techLeadPhoto").value.trim();
   const extras = coworkers.photo.slice();
 
-  if (!chosen)              { showError("Pick the equipment first", "Search and tap the right one from the list."); return; }
-  if (!lead)                { showError("Enter your name", "Please type your full name in the Who is on this job box."); return; }
-  if (files.length === 0)   { showError("Add at least one photo", "Tap the Choose photos box first."); return; }
+  if (!chosen) {
+    // Help user understand what to do
+    const modelVal = document.getElementById("modelPhoto").value.trim();
+    if (!modelVal) {
+      showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
+    } else {
+      showError("Pick the equipment from the list", "Tap a result from the dropdown, or tap Add as new if it doesn't exist.");
+    }
+    return;
+  }
+  if (!lead)              { showError("Enter your name", "Please type your full name in the Who is on this job box."); return; }
+  if (files.length === 0) { showError("Add at least one photo", "Tap the Choose photos box first."); return; }
 
-  // Read files as base64
   const fileData = await Promise.all(Array.from(files).map(f => new Promise(res => {
     const r = new FileReader();
     r.onload = ev => res({ name: f.name, mime: f.type, data: ev.target.result.split(",")[1] });
@@ -825,8 +968,6 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
 
   btn.disabled = true;
   btn.innerHTML = '⏳ Uploading…';
-
-  // 🔵 Big visual feedback
   showLoading(
     "Uploading " + files.length + " photo" + (files.length>1?"s":"") + "…",
     "Please wait. Do not close this page."
@@ -834,20 +975,14 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
 
   try {
     await submitViaIframe(APPS_SCRIPT_URL, payload);
-
-    const tag = buildFolderTag_("photo");
-    // 🟢 Success confirmation
     showSuccess(
       "All done! Thanks.",
       files.length + " photo" + (files.length>1?"s":"") + " uploaded and filed."
     );
-
-    // reset for next batch
     filesInput.value = "";
     fileCount.textContent = "0";
     fileBtn.classList.remove("has-files");
     document.getElementById("fileLabel").textContent = "Tap here to choose photos";
-
   } catch (err) {
     console.error(err);
     showError("Upload failed", "Check your internet and try again. Nothing was lost.");
@@ -905,21 +1040,26 @@ document.getElementById("clearSig").addEventListener("click", () => {
    ============================================================ */
 document.getElementById("submitSign").addEventListener("click", async () => {
   const btn = document.getElementById("submitSign");
-
-  // Auto-add any pending coworker text
   flushCoworkerInput_("sign");
 
-  const chosen  = pickerState.sign.selected;
+  const chosen   = pickerState.sign.selected;
   const custName = document.getElementById("custName").value.trim();
   const lead     = document.getElementById("techLeadSign").value.trim();
   const extras   = coworkers.sign.slice();
 
-  if (!chosen)   { showError("Pick the equipment first", "Search and tap the right one from the list."); return; }
+  if (!chosen) {
+    const modelVal = document.getElementById("modelSign").value.trim();
+    if (!modelVal) {
+      showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
+    } else {
+      showError("Pick the equipment from the list", "Tap a result from the dropdown, or tap Add as new if it doesn't exist.");
+    }
+    return;
+  }
   if (!custName) { showError("Customer must print their name", "Please hand the device to the customer."); return; }
   if (!signed)   { showError("Customer must sign", "Please ask them to sign in the box."); return; }
   if (!lead)     { showError("Enter your name", "Please type your full name in the Who is on this job box."); return; }
 
-  // Safely serialize the canvas
   let sigData;
   try {
     sigData = canvas.toDataURL("image/png");
@@ -942,17 +1082,11 @@ document.getElementById("submitSign").addEventListener("click", async () => {
 
   btn.disabled = true;
   btn.innerHTML = '⏳ Saving…';
-
-  // 🔵 Big visual feedback for the customer
   showLoading("Saving signature…", "Please wait. Do not close this page.");
 
   try {
     await submitViaIframe(APPS_SCRIPT_URL, payload);
-
-    // 🟢 Success
     showSuccess("All done — thank you!", "Customer signature saved.");
-
-    // reset for next customer
     document.getElementById("custName").value = "";
     coworkers.sign = [];
     renderCoworkers_("sign");
@@ -960,8 +1094,8 @@ document.getElementById("submitSign").addEventListener("click", async () => {
     ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     signed = false;
     clearChosen_("sign");
-    searchSign.value = "";
-
+    document.getElementById("nameSign").value = "";
+    document.getElementById("modelSign").value = "";
   } catch (err) {
     console.error(err);
     showError("Save failed", "Check your internet and try again.");
@@ -971,9 +1105,7 @@ document.getElementById("submitSign").addEventListener("click", async () => {
   }
 });
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
+/* ---------- helper ---------- */
 function escapeHTML_(s) {
   return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 }
