@@ -13,6 +13,15 @@
   h1{font-size:24px;font-weight:800;color:#0b1b2f;display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
   h1 span{background:#0b1b2f;color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.6px;}
   .sub{font-size:15px;color:#3d5170;margin-bottom:20px;border-left:4px solid #2f7ef5;padding-left:14px;line-height:1.45;font-weight:500;}
+
+  /* Connection error banner */
+  .conn-banner{display:none;background:#ffe9e9;border:2px solid #e53935;border-radius:16px;padding:18px;margin-bottom:18px;color:#8a1f1f;font-weight:600;}
+  .conn-banner.show{display:block;}
+  .conn-banner h3{font-size:18px;margin-bottom:6px;color:#8a1f1f;}
+  .conn-banner p{font-size:14px;line-height:1.5;margin-bottom:12px;}
+  .conn-banner button{background:#e53935;color:#fff;border:none;border-radius:12px;padding:14px 20px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 3px 0 #a32320;width:100%;}
+  .conn-banner button:active{transform:translateY(2px);box-shadow:0 1px 0 #a32320;}
+
   .step{background:#f7faff;border:2px solid #dde8f5;border-radius:20px;padding:20px 20px 22px;margin-bottom:18px;position:relative;}
   .step-label{font-size:15px;font-weight:800;color:#1e6df2;letter-spacing:.3px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
   .step-label .num{background:#1e6df2;color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0;}
@@ -97,7 +106,6 @@
   .chosen-summary.show{display:block;}
   .chosen-summary strong{color:#0b1b2f;}
 
-  /* Modal system */
   .modal-backdrop{position:fixed;inset:0;background:rgba(11,27,47,.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);overflow-y:auto;}
   .modal-backdrop.show{display:flex;animation:fadeIn .15s ease-out;}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -113,7 +121,6 @@
   .modal .actions .confirm{background:#0f9d58;color:#fff;box-shadow:0 4px 0 #0a6c3c;}
   .modal .actions .confirm:active{box-shadow:0 1px 0 #0a6c3c;}
 
-  /* Add new modal fields */
   .modal-field{margin-bottom:18px;}
   .modal-field label{font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;}
   .modal-field .opt-tag{font-size:13px;font-weight:500;color:#8f9fb2;}
@@ -128,7 +135,6 @@
   .sim-lbl{font-weight:700;color:#0b1b2f;font-size:15px;}
   .sim-meta{font-size:13px;color:#8a6516;margin-top:3px;font-weight:600;}
 
-  /* Status modal */
   .status-modal{background:#fff;border-radius:28px;padding:48px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popIn .25s cubic-bezier(.2,.8,.4,1.2);margin:auto;}
   @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
   .big-spinner{width:96px;height:96px;border:10px solid #e2eaf5;border-top-color:#1e6df2;border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 28px;}
@@ -139,12 +145,28 @@
   .status-modal p{font-size:18px;color:#3d5170;line-height:1.5;font-weight:500;}
   .modal-close-btn{margin-top:26px;padding:20px 40px;border:none;border-radius:16px;background:#0b1b2f;color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 4px 0 #05101d;width:100%;letter-spacing:.3px;}
   .modal-close-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
+
+  /* Diagnostic modal */
+  .diag-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #f1f5fb;font-size:15px;}
+  .diag-row:last-child{border-bottom:none;}
+  .diag-key{font-weight:700;color:#3d5170;}
+  .diag-val{font-weight:600;color:#0b1b2f;text-align:right;max-width:60%;word-break:break-word;}
+  .diag-val.ok{color:#0f9d58;}
+  .diag-val.bad{color:#e53935;}
+  pre.raw{background:#0b1b2f;color:#a8e6a8;padding:16px;border-radius:12px;font-size:12px;line-height:1.4;overflow-x:auto;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow-y:auto;margin-top:12px;font-family:monospace;}
 </style>
 </head>
 <body>
 <div class="card">
   <h1>⚙️ HighEnd Equipment <span>FIELD PORTAL</span></h1>
   <div class="sub" id="subtitle">Search the equipment, pick BEFORE or AFTER, add your name and photos. Done.</div>
+
+  <!-- Connection error banner (only shows if GET fails) -->
+  <div class="conn-banner" id="connBanner">
+    <h3>⚠️ Can't reach the server</h3>
+    <p id="connBannerText">The page couldn't load the equipment list. This usually means the Apps Script URL is wrong or the deployment isn't set to "Anyone".</p>
+    <button id="connBannerTest">🔍 Run Diagnostic Test</button>
+  </div>
 
   <div class="mode-switch">
     <button id="modePhotos" class="active">📸 Photos</button>
@@ -192,7 +214,7 @@
           <input type="text" id="coworkerInputPhoto" placeholder="e.g. Dave, Danny, Tony" autocomplete="off">
           <button type="button" id="addCoworkerPhoto">+ Add</button>
         </div>
-        <div class="hint">Type names separated by commas. They'll be added automatically — you don't have to tap Add.</div>
+        <div class="hint">Type names separated by commas. They'll be added automatically.</div>
       </div>
       <div class="folder-preview" id="folderPreviewPhoto"></div>
     </div>
@@ -204,7 +226,7 @@
         <span class="count" id="fileCount">0</span>
       </label>
       <input type="file" id="files" accept="image/*" multiple>
-      <div class="hint">📱 You can pick <strong>many photos at once</strong> from your camera roll. Hold and select them all.</div>
+      <div class="hint">📱 You can pick <strong>many photos at once</strong> from your camera roll.</div>
     </div>
 
     <button class="submit" id="submitPhotos">⬆️ Upload Photos</button>
@@ -278,7 +300,11 @@
     <button class="submit" id="submitSign">✅ Save Customer Sign-off</button>
   </div>
 
-  <div class="small-note">Every upload is filed by equipment ID, date, and tech name.</div>
+  <div class="small-note">
+    Every upload is filed by equipment ID, date, and tech name.
+    <br><br>
+    <span id="diagLink" style="text-decoration:underline;color:#8f9fb2;cursor:pointer;font-weight:600;">🔍 Diagnostics</span>
+  </div>
 </div>
 
 <!-- ============ ADD NEW EQUIPMENT MODAL ============ -->
@@ -290,7 +316,7 @@
     <div class="modal-field">
       <label>Equipment Name <span class="opt-tag">(optional)</span></label>
       <input type="text" id="addName" placeholder="e.g. Sea Breeze" autocomplete="off">
-      <div class="hint">Only if it has a name painted on it (like a boat). Leave blank for most equipment.</div>
+      <div class="hint">Only if it has a name painted on it (like a boat).</div>
     </div>
 
     <div class="modal-field">
@@ -314,7 +340,7 @@
   </div>
 </div>
 
-<!-- ============ STATUS MODAL (spinner / success / error) ============ -->
+<!-- ============ STATUS MODAL ============ -->
 <div class="modal-backdrop" id="statusModal">
   <div class="status-modal">
     <div id="statusIconWrap">
@@ -328,7 +354,20 @@
   </div>
 </div>
 
-<!-- ============ HIDDEN IFRAME + FORM ============ -->
+<!-- ============ DIAGNOSTIC MODAL ============ -->
+<div class="modal-backdrop" id="diagModal">
+  <div class="modal">
+    <h3>🔍 Diagnostic Test</h3>
+    <p class="modal-sub">This tests the connection between this page and your Apps Script.</p>
+    <div id="diagResults"></div>
+    <div class="actions">
+      <button class="cancel" id="diagClose">Close</button>
+      <button class="confirm" id="diagRerun">Run Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden iframe + form -->
 <iframe name="upload_target" id="uploadTarget" style="display:none;" title="upload target"></iframe>
 <form id="uploadForm" target="upload_target" method="POST" enctype="text/plain" action="" style="display:none;">
   <input type="hidden" name="data" id="uploadData">
@@ -337,8 +376,20 @@
 <script>
 /* ============================================================
    ⚠️ CONFIG — REPLACE WITH YOUR DEPLOYED APPS SCRIPT URL
+   The URL must end in /exec  (NOT /dev)
    ============================================================ */
 const APPS_SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+/* ---------- Startup sanity check on the URL ---------- */
+(function checkUrlFormat() {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf("PASTE_YOUR") === 0) {
+    alert("⚠️ SETUP ERROR\n\nThe APPS_SCRIPT_URL has not been set in index.html.\n\nOpen the file in a text editor and replace PASTE_YOUR_WEB_APP_URL_HERE with your Apps Script Web App URL.");
+    return;
+  }
+  if (APPS_SCRIPT_URL.indexOf("/exec") === -1) {
+    alert("⚠️ URL WARNING\n\nYour APPS_SCRIPT_URL does not end in /exec.\n\nMake sure you copied the URL from 'Deploy → Manage deployments' (the /exec one), NOT the /dev one from 'Test deployments'.\n\nCurrent: " + APPS_SCRIPT_URL);
+  }
+})();
 
 const todayStr = (() => {
   const d = new Date();
@@ -401,7 +452,6 @@ function hideStatus() {
 }
 
 statusCloseBtn.addEventListener("click", hideStatus);
-// Tap outside the status modal to close — but only when it's an error
 statusModal.addEventListener("click", (e) => {
   if (e.target === statusModal && statusCloseBtn.style.display !== "none") {
     hideStatus();
@@ -409,7 +459,7 @@ statusModal.addEventListener("click", (e) => {
 });
 
 /* ============================================================
-   IFRAME UPLOAD (reliable "done" signal)
+   IFRAME UPLOAD
    ============================================================ */
 function submitViaIframe(url, payload) {
   return new Promise((resolve, reject) => {
@@ -430,7 +480,7 @@ function submitViaIframe(url, payload) {
       done = true;
       clearTimeout(timeout);
       iframe.onload = null;
-      setTimeout(resolve, 500);
+      setTimeout(resolve, 600);
     };
 
     form.action = url;
@@ -479,6 +529,7 @@ document.getElementById("techLeadSign").addEventListener("input",  e => persistT
 let equipmentList = [];
 const RECENTS_KEY = "recentEquipmentIds";
 const MAX_RECENTS = 8;
+let lastLoadStatus = "not attempted"; // for diagnostics
 
 function getRecentIds() {
   try { return JSON.parse(localStorage.getItem(RECENTS_KEY) || "[]"); }
@@ -494,30 +545,135 @@ async function loadEquipment(retries) {
   retries = (typeof retries === "number") ? retries : 3;
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
-      // Cache-buster: Apps Script CDN caches GET responses for ~30s
       const url = APPS_SCRIPT_URL + "?action=list&_=" + Date.now();
+      console.log("[loadEquipment] attempt " + (attempt+1) + " → " + url);
       const res = await fetch(url, { cache: "no-store" });
+      console.log("[loadEquipment] HTTP status:", res.status);
       if (!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
+      const text = await res.text();
+      console.log("[loadEquipment] raw response (first 300 chars):", text.substring(0, 300));
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseErr) {
+        // The response isn't JSON — probably an HTML error page from Google
+        throw new Error("Response is not JSON. Got: " + text.substring(0, 200));
+      }
       if (!data.ok) throw new Error(data.error || "load failed");
       equipmentList = data.equipment || [];
-      // Refresh any open picker
+      lastLoadStatus = "OK — " + equipmentList.length + " items";
+      console.log("[loadEquipment] OK:", equipmentList.length, "items");
+      hideConnBanner();
       if (document.getElementById("resultsPhoto").classList.contains("show")) renderPickerResults("photo");
       if (document.getElementById("resultsSign").classList.contains("show"))  renderPickerResults("sign");
-      console.log("loadEquipment OK:", equipmentList.length, "items");
       return;
     } catch (err) {
-      console.warn("loadEquipment attempt " + (attempt+1) + " failed:", err);
-      if (attempt < retries - 1) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+      console.warn("[loadEquipment] attempt " + (attempt+1) + " failed:", err);
+      lastLoadStatus = "Failed: " + (err.message || err);
+      if (attempt < retries - 1) await new Promise(r => setTimeout(r, 900 * (attempt + 1)));
     }
   }
-  console.error("loadEquipment gave up after " + retries + " attempts");
-  equipmentList = [];
+  console.error("[loadEquipment] gave up after " + retries + " attempts");
+  showConnBanner(lastLoadStatus);
 }
+
+function showConnBanner(msg) {
+  document.getElementById("connBannerText").textContent =
+    "The page couldn't load the equipment list.\n\nReason: " + msg;
+  document.getElementById("connBanner").classList.add("show");
+}
+function hideConnBanner() {
+  document.getElementById("connBanner").classList.remove("show");
+}
+
+document.getElementById("connBannerTest").addEventListener("click", runDiagnostic);
+
 loadEquipment();
 
 /* ============================================================
-   PICKER STATE
+   DIAGNOSTIC
+   ============================================================ */
+document.getElementById("diagLink").addEventListener("click", runDiagnostic);
+
+async function runDiagnostic() {
+  const resultsEl = document.getElementById("diagResults");
+  resultsEl.innerHTML = "<div style='padding:20px;text-align:center;font-weight:600;color:#5e6f8b;'>Running test…</div>";
+  document.getElementById("diagModal").classList.add("show");
+
+  const rows = [];
+  const addRow = (k, v, ok) => rows.push({ k, v, ok });
+
+  addRow("Configured URL", APPS_SCRIPT_URL.substring(0, 80) + (APPS_SCRIPT_URL.length > 80 ? "…" : ""), APPS_SCRIPT_URL.indexOf("PASTE_YOUR") === -1);
+  addRow("URL ends in /exec", APPS_SCRIPT_URL.endsWith("/exec") ? "✓ yes" : "✗ NO — must end in /exec", APPS_SCRIPT_URL.endsWith("/exec"));
+
+  // Test the GET endpoint
+  let rawText = "";
+  try {
+    const url = APPS_SCRIPT_URL + "?action=ping&_=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+    addRow("GET request status", String(res.status), res.ok);
+    rawText = await res.text();
+    addRow("Response length", rawText.length + " chars", rawText.length > 0);
+
+    // Try to parse as JSON
+    try {
+      const data = JSON.parse(rawText);
+      addRow("Response is JSON", "✓ yes", true);
+      addRow("Response .ok", String(data.ok), data.ok === true);
+      if (data.ok) {
+        addRow("Server message", data.message || "(none)", true);
+        addRow("Sheet name", data.sheetName || "(unknown)", true);
+        addRow("Sheet ID", (data.sheetId || "").substring(0, 20) + "…", true);
+        addRow("Equipment count", String(data.itemCount), true);
+        if (data.items && data.items.length > 0) {
+          addRow("First item", data.items[0].id + " — " + data.items[0].label, true);
+        }
+      } else {
+        addRow("Server error", data.error || "(no error message)", false);
+      }
+    } catch (parseErr) {
+      addRow("Response is JSON", "✗ NO — got HTML or plain text", false);
+    }
+  } catch (err) {
+    addRow("GET request", "✗ FAILED: " + (err.message || err), false);
+  }
+
+  let html = rows.map(r => `
+    <div class="diag-row">
+      <span class="diag-key">${escapeHTML_(r.k)}</span>
+      <span class="diag-val ${r.ok === true ? 'ok' : (r.ok === false ? 'bad' : '')}">${escapeHTML_(r.v)}</span>
+    </div>
+  `).join("");
+
+  if (rawText) {
+    html += "<div style='font-size:13px;font-weight:700;color:#5e6f8b;margin-top:16px;'>Raw response from server:</div>";
+    html += "<pre class='raw'>" + escapeHTML_(rawText.substring(0, 2000)) + "</pre>";
+  }
+
+  // Helper text if failing
+  if (rows.some(r => r.ok === false)) {
+    html += `
+      <div style="margin-top:18px;padding:16px;background:#fff7e6;border:2px solid #f0d89b;border-radius:14px;font-size:14px;line-height:1.6;color:#6d4f0a;">
+        <strong>What to check in Apps Script:</strong><br>
+        1. Open your Apps Script project → <strong>Deploy → Manage deployments</strong><br>
+        2. The URL should end in <strong>/exec</strong>, not /dev<br>
+        3. Click the pencil ✏️ → set <strong>"Execute as" = Me</strong> and <strong>"Who has access" = Anyone</strong><br>
+        4. Click <strong>Version: New version</strong> → Deploy<br>
+        5. In the editor, click ▶ Run with function <code>doGet</code> selected — approve permissions if prompted<br>
+        6. Check <strong>Executions</strong> in the left sidebar to see if doGet ran
+      </div>`;
+  }
+
+  resultsEl.innerHTML = html;
+}
+
+document.getElementById("diagClose").addEventListener("click", () => {
+  document.getElementById("diagModal").classList.remove("show");
+});
+document.getElementById("diagRerun").addEventListener("click", runDiagnostic);
+
+/* ============================================================
+   PICKER
    ============================================================ */
 const pickerState = {
   photo: { selected: null },
@@ -553,7 +709,6 @@ function setupPicker_(which) {
 
   nameEl.addEventListener("focus", showDropdown);
   modelEl.addEventListener("focus", showDropdown);
-
   nameEl.addEventListener("input", () => {
     if (pickerState[which].selected) clearChosen_(which);
     showDropdown();
@@ -586,7 +741,9 @@ function renderPickerResults(which) {
 
   let html = "";
 
-  if (!query && recentItems.length > 0) {
+  if (equipmentList.length === 0 && !query) {
+    html += `<div class="empty">No equipment loaded yet.<br><small>Type a name and tap "Add as new" below.</small></div>`;
+  } else if (!query && recentItems.length > 0) {
     html += `<div class="group-label">⭐ My Recent</div>`;
     recentItems.slice(0, 5).forEach(e => { html += resultRowHTML_(e); });
     if (equipmentList.length > recentItems.length) {
@@ -600,7 +757,7 @@ function renderPickerResults(which) {
     html += `<div class="group-label">${shown.length}${matches.length > shown.length ? " of " + matches.length : ""} match${matches.length===1?"":"es"}</div>`;
     shown.forEach(e => { html += resultRowHTML_(e); });
   } else if (query) {
-    html += `<div class="empty">No equipment matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it as new.</small></div>`;
+    html += `<div class="empty">No equipment matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it.</small></div>`;
   } else {
     html += `<div class="empty">Start typing to search.<br><small>Or tap below to add new equipment.</small></div>`;
   }
@@ -668,11 +825,9 @@ function clearChosen_(which) {
   document.getElementById(i.summary).classList.remove("show");
 }
 
-// Wire both pickers
 setupPicker_("photo");
 setupPicker_("sign");
 
-// Outside click closes both dropdowns
 document.addEventListener("click", (e) => {
   ["photo","sign"].forEach(which => {
     const i = ids_(which);
@@ -693,7 +848,6 @@ function openAddModal_(which) {
   pendingWhich = which || "photo";
   const i = ids_(which);
 
-  // Prefill from current field values
   document.getElementById("addName").value     = document.getElementById(i.name).value.trim();
   document.getElementById("addModel").value    = document.getElementById(i.model).value.trim();
   document.getElementById("addCustomer").value = "";
@@ -701,7 +855,6 @@ function openAddModal_(which) {
   updateAddModalSuggestions();
   document.getElementById("addModal").classList.add("show");
 
-  // Focus model field (the required one) if name is empty, else focus customer
   setTimeout(() => {
     const nameVal = document.getElementById("addName").value.trim();
     if (!nameVal) document.getElementById("addName").focus();
@@ -715,11 +868,7 @@ function updateAddModalSuggestions() {
   const listEl = document.getElementById("addSimilarList");
   const query = (n + " " + m).trim();
 
-  if (!query || query.length < 2) {
-    listEl.innerHTML = "";
-    return;
-  }
-
+  if (!query || query.length < 2) { listEl.innerHTML = ""; return; }
   const words = query.split(/\s+/).filter(w => w.length >= 3);
   if (words.length === 0) { listEl.innerHTML = ""; return; }
 
@@ -787,17 +936,19 @@ document.getElementById("addConfirm").addEventListener("click", async () => {
       (e.model || "").toLowerCase() === wantedModel &&
       (e.name  || "").toLowerCase() === wantedName
     );
-    if (!found) {
-      found = equipmentList.find(e => (e.model || "").toLowerCase() === wantedModel);
-    }
+    if (!found) found = equipmentList.find(e => (e.model || "").toLowerCase() === wantedModel);
+
     if (found) {
       selectEquipment_(pendingWhich, found.id);
+      showSuccess("Equipment created!", "Everyone can now search for it.");
     } else {
-      console.warn("Newly created equipment not found in list after reload");
+      // Server-side may have succeeded but list didn't refresh in time — tell the user honestly
+      showSuccess(
+        "Equipment saved",
+        "It may take a few seconds to appear. If you don't see it, refresh the page.",
+        3500
+      );
     }
-
-    showSuccess("Equipment created!", "Everyone can now search for it by typing a few letters.");
-
   } catch (err) {
     console.error("Create equipment failed:", err);
     showError("Could not create equipment", "Please check your connection and try again.");
@@ -819,7 +970,6 @@ function slugifyName_(name) {
 }
 
 function buildFolderTag_(which) {
-  const i = ids_(which);
   const lead = document.getElementById(which === "photo" ? "techLeadPhoto" : "techLeadSign").value.trim();
   const extras = coworkers[which];
   const names = [lead].concat(extras).filter(n => n && n.trim());
@@ -858,10 +1008,7 @@ function addCoworkersFromString_(which, str) {
     const exists = coworkers[which].some(c => c.toLowerCase() === n.toLowerCase());
     if (!exists) { coworkers[which].push(n); added = true; }
   });
-  if (added) {
-    renderCoworkers_(which);
-    updateFolderPreviews();
-  }
+  if (added) { renderCoworkers_(which); updateFolderPreviews(); }
 }
 
 function flushCoworkerInput_(which) {
@@ -925,7 +1072,7 @@ filesInput.addEventListener("change", () => {
 });
 
 /* ============================================================
-   PHOTO PANEL SUBMIT
+   PHOTO SUBMIT
    ============================================================ */
 document.getElementById("submitPhotos").addEventListener("click", async () => {
   const btn = document.getElementById("submitPhotos");
@@ -938,7 +1085,6 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
   const extras = coworkers.photo.slice();
 
   if (!chosen) {
-    // Help user understand what to do
     const modelVal = document.getElementById("modelPhoto").value.trim();
     if (!modelVal) {
       showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
@@ -947,7 +1093,7 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
     }
     return;
   }
-  if (!lead)              { showError("Enter your name", "Please type your full name in the Who is on this job box."); return; }
+  if (!lead)              { showError("Enter your name", "Please type your full name."); return; }
   if (files.length === 0) { showError("Add at least one photo", "Tap the Choose photos box first."); return; }
 
   const fileData = await Promise.all(Array.from(files).map(f => new Promise(res => {
@@ -975,10 +1121,7 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
 
   try {
     await submitViaIframe(APPS_SCRIPT_URL, payload);
-    showSuccess(
-      "All done! Thanks.",
-      files.length + " photo" + (files.length>1?"s":"") + " uploaded and filed."
-    );
+    showSuccess("All done! Thanks.", files.length + " photo" + (files.length>1?"s":"") + " uploaded and filed.");
     filesInput.value = "";
     fileCount.textContent = "0";
     fileBtn.classList.remove("has-files");
@@ -1036,7 +1179,7 @@ document.getElementById("clearSig").addEventListener("click", () => {
 });
 
 /* ============================================================
-   SIGN PANEL SUBMIT
+   SIGN SUBMIT
    ============================================================ */
 document.getElementById("submitSign").addEventListener("click", async () => {
   const btn = document.getElementById("submitSign");
@@ -1058,7 +1201,7 @@ document.getElementById("submitSign").addEventListener("click", async () => {
   }
   if (!custName) { showError("Customer must print their name", "Please hand the device to the customer."); return; }
   if (!signed)   { showError("Customer must sign", "Please ask them to sign in the box."); return; }
-  if (!lead)     { showError("Enter your name", "Please type your full name in the Who is on this job box."); return; }
+  if (!lead)     { showError("Enter your name", "Please type your full name."); return; }
 
   let sigData;
   try {
