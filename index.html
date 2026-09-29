@@ -179,16 +179,16 @@
   <!-- ============ PHOTOS PANEL ============ -->
   <div id="panelPhotos" class="panel active">
     <div class="step">
-      <div class="step-label"><span class="num">1</span> Which equipment did you service?</div>
+      <div class="step-label"><span class="num">1</span> Which vessel did you service?</div>
       <div class="picker" id="pickerPhoto">
         <div class="picker-fields">
           <div class="picker-field">
-            <label>Equipment Name <span class="opt-tag">(optional — only if it has a name on the side, like a boat)</span></label>
+            <label>Vessel Name <span class="opt-tag">(optional)</span></label>
             <input type="text" id="namePhoto" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
           </div>
           <div class="picker-field">
-            <label>Model / Size <span class="req-tag">* REQUIRED</span></label>
-            <input type="text" id="modelPhoto" placeholder="e.g. 25ft Boston Whaler, Cat D20 Loader" autocomplete="off" autocapitalize="off" spellcheck="false">
+            <label>Size / Make <span class="req-tag">* REQUIRED</span></label>
+            <input type="text" id="modelPhoto" placeholder="e.g. 130ft Westport" autocomplete="off" autocapitalize="off" spellcheck="false">
           </div>
         </div>
         <div class="picker-results" id="resultsPhoto"></div>
@@ -217,7 +217,7 @@
           <input type="text" id="coworkerInputPhoto" placeholder="e.g. Dave, Danny, Tony" autocomplete="off">
           <button type="button" id="addCoworkerPhoto">+ Add</button>
         </div>
-        <div class="hint">Type names separated by commas. They'll be added automatically.</div>
+        <div class="hint">Type names separated by commas.</div>
       </div>
       <div class="folder-preview" id="folderPreviewPhoto"></div>
     </div>
@@ -229,7 +229,6 @@
         <span class="count" id="fileCount">0</span>
       </label>
       <input type="file" id="files" accept="image/*" multiple>
-      <div class="hint">📱 You can pick <strong>many photos at once</strong> from your camera roll.</div>
     </div>
 
     <button class="submit" id="submitPhotos">⬆️ Upload Photos</button>
@@ -238,7 +237,7 @@
   <!-- ============ SIGN PANEL ============ -->
   <div id="panelSign" class="panel">
     <div class="step">
-      <div class="step-label"><span class="num">1</span> Which equipment did you service?</div>
+      <div class="step-label"><span class="num">1</span> Which vessel did you service?</div>
       <div class="picker" id="pickerSign">
         <div class="picker-fields">
           <div class="picker-field">
@@ -246,8 +245,8 @@
             <input type="text" id="nameSign" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
           </div>
           <div class="picker-field">
-            <label>Model / Size <span class="req-tag">* REQUIRED</span></label>
-            <input type="text" id="modelSign" placeholder="e.g. 25ft Boston Whaler" autocomplete="off" autocapitalize="off" spellcheck="false">
+            <label>Size / Make <span class="req-tag">* REQUIRED</span></label>
+            <input type="text" id="modelSign" placeholder="e.g. 130ft Westport" autocomplete="off" autocapitalize="off" spellcheck="false">
           </div>
         </div>
         <div class="picker-results" id="resultsSign"></div>
@@ -256,7 +255,7 @@
     </div>
 
     <div class="step">
-      <div class="step-label"><span class="num">2</span> Customer prints name & date</div>
+      <div class="step-label"><span class="num">2</span> Customer details</div>
       <div class="sign-fields">
         <div>
           <label>Customer full name</label>
@@ -295,7 +294,7 @@
           <input type="text" id="coworkerInputSign" placeholder="e.g. Dave, Danny, Tony" autocomplete="off">
           <button type="button" id="addCoworkerSign">+ Add</button>
         </div>
-        <div class="hint">Type names separated by commas. They'll be added automatically.</div>
+        <div class="hint">Type names separated by commas.</div>
       </div>
       <div class="folder-preview" id="folderPreviewSign"></div>
     </div>
@@ -313,25 +312,24 @@
 <!-- ============ ADD NEW EQUIPMENT MODAL ============ -->
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
-    <h3>Add New Equipment</h3>
+    <h3>Add New Vessel</h3>
     <p class="modal-sub">Fill this in once. After this, everyone can find it by searching.</p>
 
     <div class="modal-field">
-      <label>Equipment Name <span class="opt-tag">(optional)</span></label>
+      <label>Vessel Name <span class="opt-tag">(optional)</span></label>
       <input type="text" id="addName" placeholder="e.g. Sea Breeze" autocomplete="off">
       <div class="hint">Only if it has a name painted on it (like a boat).</div>
     </div>
 
     <div class="modal-field">
-      <label>Model / Size <span class="req-tag">* REQUIRED</span></label>
-      <input type="text" id="addModel" placeholder="e.g. 25ft Boston Whaler, Cat D20 Loader" autocomplete="off">
-      <div class="hint">The make, model, or size of the equipment.</div>
+      <label>Size / Make <span class="req-tag">* REQUIRED</span></label>
+      <input type="text" id="addModel" placeholder="e.g. 130ft Westport" autocomplete="off">
+      <div class="hint">The size and make of the vessel.</div>
     </div>
 
     <div class="modal-field">
       <label>Customer / Owner <span class="opt-tag">(optional)</span></label>
       <input type="text" id="addCustomer" placeholder="e.g. Johnny's Farm" autocomplete="off">
-      <div class="hint">Only type this once, when the equipment is first added.</div>
     </div>
 
     <div id="addSimilarList"></div>
@@ -502,13 +500,11 @@ const panS = document.getElementById("panelSign");
 const subtitle = document.getElementById("subtitle");
 btnP.addEventListener("click", () => {
   btnP.classList.add("active"); btnS.classList.remove("active");
-  panP.classList.add("active"); panS.classList.remove("active");
-  subtitle.textContent = "Search the equipment, pick BEFORE or AFTER, add your name and photos. Done.";
+  panP.classList.add("active"); panS.classList.remove("active")
 });
 btnS.addEventListener("click", () => {
   btnS.classList.add("active"); btnP.classList.remove("active");
-  panS.classList.add("active"); panP.classList.remove("active");
-  subtitle.textContent = "Hand the device to the customer to type their name and sign.";
+  panS.classList.add("active"); panP.classList.remove("active")
 });
 
 /* ============================================================
