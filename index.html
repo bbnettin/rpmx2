@@ -741,7 +741,7 @@ function renderPickerResults(which) {
   let html = "";
 
   if (equipmentList.length === 0 && !query) {
-    html += `<div class="empty">No equipment loaded yet.<br><small>Type a name and tap "Add as new" below.</small></div>`;
+    html += `<div class="empty">No vessel loaded yet.<br><small>Type a name and tap "Add as new" below.</small></div>`;
   } else if (!query && recentItems.length > 0) {
     html += `<div class="group-label">⭐ My Recent</div>`;
     recentItems.slice(0, 5).forEach(e => { html += resultRowHTML_(e); });
@@ -756,7 +756,7 @@ function renderPickerResults(which) {
     html += `<div class="group-label">${shown.length}${matches.length > shown.length ? " of " + matches.length : ""} match${matches.length===1?"":"es"}</div>`;
     shown.forEach(e => { html += resultRowHTML_(e); });
   } else if (query) {
-    html += `<div class="empty">No equipment matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it.</small></div>`;
+    html += `<div class="empty">No vessel matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it.</small></div>`;
   } else {
     html += `<div class="empty">Start typing to search.<br><small>Or tap below to add new vessel.</small></div>`;
   }
@@ -765,7 +765,7 @@ function renderPickerResults(which) {
     <div class="add-inline" data-action="add">
       <div class="plus">+</div>
       <div class="txt">
-        Add as new equipment
+        Add as new vessel
         <small>Only if it doesn't already exist above.</small>
       </div>
     </div>`;
