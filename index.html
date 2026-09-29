@@ -241,7 +241,7 @@
       <div class="picker" id="pickerSign">
         <div class="picker-fields">
           <div class="picker-field">
-            <label>Equipment Name <span class="opt-tag">(optional)</span></label>
+            <label>Vessel Name <span class="opt-tag">(optional)</span></label>
             <input type="text" id="nameSign" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
           </div>
           <div class="picker-field">
@@ -329,14 +329,14 @@
 
     <div class="modal-field">
       <label>Customer / Owner <span class="opt-tag">(optional)</span></label>
-      <input type="text" id="addCustomer" placeholder="e.g. Johnny's Farm" autocomplete="off">
+      <input type="text" id="addCustomer" placeholder="e.g. John Smith" autocomplete="off">
     </div>
 
     <div id="addSimilarList"></div>
 
     <div class="actions">
       <button class="cancel" id="addCancel">Cancel</button>
-      <button class="confirm" id="addConfirm">✓ Create Equipment</button>
+      <button class="confirm" id="addConfirm">✓ Create Vessel</button>
     </div>
   </div>
 </div>
@@ -758,7 +758,7 @@ function renderPickerResults(which) {
   } else if (query) {
     html += `<div class="empty">No equipment matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it.</small></div>`;
   } else {
-    html += `<div class="empty">Start typing to search.<br><small>Or tap below to add new equipment.</small></div>`;
+    html += `<div class="empty">Start typing to search.<br><small>Or tap below to add new vessel.</small></div>`;
   }
 
   html += `
@@ -886,7 +886,7 @@ function updateAddModalSuggestions() {
         <div class="sim-meta">${escapeHTML_(e.id)}${e.customer ? " · " + escapeHTML_(e.customer) : ""}</div>
       </div>
     `).join("")}
-    <div style="font-size:13px;color:#8a6516;margin-top:6px;font-weight:600;">Tap one to use it instead, or tap Create Equipment below to make a new one.</div>`;
+    <div style="font-size:13px;color:#8a6516;margin-top:6px;font-weight:600;">Tap one to use it instead, or tap Create Vessel below to make a new one.</div>`;
 
   listEl.querySelectorAll(".sim-item").forEach(el => {
     el.addEventListener("click", () => {
@@ -949,8 +949,8 @@ document.getElementById("addConfirm").addEventListener("click", async () => {
       );
     }
   } catch (err) {
-    console.error("Create equipment failed:", err);
-    showError("Could not create equipment", "Please check your connection and try again.");
+    console.error("Create vessel failed:", err);
+    showError("Could not create vessel", "Please check your connection and try again.");
   }
 });
 
