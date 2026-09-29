@@ -907,12 +907,12 @@ document.getElementById("addConfirm").addEventListener("click", async () => {
   const customer = document.getElementById("addCustomer").value.trim();
 
   if (!model) {
-    showError("Model / Size is required", "Please type at least the model or size of the equipment.");
+    showError("Size/make is required", "Please type at least the size and make of the vessel.");
     return;
   }
 
   document.getElementById("addModal").classList.remove("show");
-  showLoading("Creating new equipment…", "This takes a few seconds. Please wait.");
+  showLoading("Creating new vessel…", "This takes a few seconds. Please wait.");
 
   try {
     await submitViaIframe(APPS_SCRIPT_URL, {
@@ -937,11 +937,11 @@ document.getElementById("addConfirm").addEventListener("click", async () => {
 
     if (found) {
       selectEquipment_(pendingWhich, found.id);
-      showSuccess("Equipment created!", "Everyone can now search for it.");
+      showSuccess("Vessel created!", "Everyone can now search for it.");
     } else {
       // Server-side may have succeeded but list didn't refresh in time — tell the user honestly
       showSuccess(
-        "Equipment saved",
+        "Vessel saved",
         "It may take a few seconds to appear. If you don't see it, refresh the page.",
         3500
       );
